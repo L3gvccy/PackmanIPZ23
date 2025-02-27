@@ -26,3 +26,15 @@ class Ghost(pygame.sprite.Sprite):
     def move_to_start_pos(self):
         self.rect.x = self.pos_x  # Повернення привиду на стартову позицію по X
         self.rect.y = self.pos_y  # Повернення привиду на стартову позицію по Y
+
+    def is_collide(self, x, y, walls_collide_list):#Перевірка на зіткнення привида зі стіною
+        tmp_rect = self.rect.move(x, y)
+        if tmp_rect.collidelist(walls_collide_list) == -1:
+            return False
+        return True
+
+    def _animate(self):
+        self.img_name = f'{self.moving_dir}.png'
+        self.image = pygame.image.load(self.img_path + self.img_name)
+        self.image = pygame.transform.scale(self.image, (char_size, char_size))
+        self.rect = self.image.get_rect(topleft=(self.rect.x, self.rect.y))# Оновлюємо координати прямокутника
