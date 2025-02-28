@@ -1,6 +1,7 @@
 import pygame
 
 from settings import CHAR_SIZE, PLAYER_SPEED
+from animation import import_sprite
 
 class Pac(pygame.sprite.Sprite):
 	def __init__(self, row, col):
@@ -24,7 +25,33 @@ class Pac(pygame.sprite.Sprite):
 		self.keys = {'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
 		self.direction = (0, 0)
 	
-		# pac status
+		# Статус
 		self.status = "idle"
 		self.life = 3
 		self.pac_score = 0
+
+		def _import_character_assets(self):
+			character_path = "assets/pac/"
+			self.animations = {
+				"up": [],
+				"down": [],
+				"left": [],
+				"right": [],
+				"idle": [],
+				"power_up": []
+			}
+			for animation in self.animations.keys():
+				full_path = character_path + animation
+				self.animations[animation] = import_sprite(full_path)
+
+
+		def _is_collide(self, x, y):
+			tmp_rect = self.rect.move(x, y)
+			if tmp_rect.collidelist(self.walls_collide_list) == -1:
+				return False
+			return True
+
+
+		def move_to_start_pos(self):
+			self.rect.x = self.abs_x
+			self.rect.y = self.abs_y
