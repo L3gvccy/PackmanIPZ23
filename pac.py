@@ -55,3 +55,32 @@ class Pac(pygame.sprite.Sprite):
 		def move_to_start_pos(self):
 			self.rect.x = self.abs_x
 			self.rect.y = self.abs_y
+
+		def animate(self, pressed_key, walls_collide_list):
+			animation = self.animations[self.status]
+
+			self.frame_index += self.animation_speed
+			if self.frame_index >= len(animation):
+				self.frame_index = 0
+			image = animation[int(self.frame_index)]
+			self.image = pygame.transform.scale(image, (CHAR_SIZE, CHAR_SIZE))
+
+			self.walls_collide_list = walls_collide_list
+			for key, key_value in self.keys.items():
+				if pressed_key[key_value] and not self._is_collide(*self.directions[key]):
+					self.direction = self.directions[key]
+					self.status = key if not self.immune else "power_up"
+					break
+			
+			if not self._is_collide(*self.direction):
+				self.rect.move_ip(self.direction)
+				self.status = self.status if not self.immune else "power_up"
+			if self._is_collide(*self.direction):
+				self.status = "idle" if not self.immune else "power_up"
+
+
+		def update(self):
+			self.immune = True if self.immune_time > 0 else False
+			self.immune_time -= 1 if self.immune_time > 0 else 0
+
+			self.rect = self.image.get_rect(topleft=(self.rect.x, self.rect.y))
