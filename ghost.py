@@ -38,3 +38,31 @@ class Ghost(pygame.sprite.Sprite):
         self.image = pygame.image.load(self.img_path + self.img_name)
         self.image = pygame.transform.scale(self.image, (char_size, char_size))
         self.rect = self.image.get_rect(topleft=(self.rect.x, self.rect.y))# Оновлюємо координати прямокутника
+
+    def update(self, walls_collide_list):
+        # Створюємо список доступних напрямків руху
+        available_moves = []
+        # Перевіряємо кожну клавішу управління, чи можна рухатися в цьому напрямку без зіткнення зі стінами
+        for key in self.keys:
+            if not self.is_collide(*self.directions[key], walls_collide_list):
+                available_moves.append(key)
+        # Визначаємо, чи варто рандомізувати рух
+        randomizing = False if len(available_moves) <= 2 and self.direction != (0, 0) else True
+
+        if randomizing and random.randrange(0, 100) <= 60:
+            self.moving_dir = random.choice(available_moves)
+            self.direction = self.directions[self.moving_dir]
+
+        # Перевіряємо, чи можемо рухатися в поточному напрямку
+        if not self.is_collide(*self.direction, walls_collide_list):
+            self.rect.move_ip(self.direction)
+        else:
+            self.direction = (0, 0)  # Якщо зіткнення є, зупиняємо рух
+
+        # Переміщуємо об'єкт на протилежний край екрану, якщо він вийшов за межі
+        if self.rect.right <= 0:
+            self.rect.x = width
+        elif self.rect.left >= width:
+            self.rect.x = 0
+
+        self._animate()
