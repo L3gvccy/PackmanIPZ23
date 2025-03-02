@@ -23,20 +23,101 @@ class World:
 		self.player_score = 0
 		self.game_level = 1
 
+		self.cell_color, self.berry_color = self.show_color_selection_menu()
+
 		self._generate_world()
 
+	def show_color_selection_menu(self):
+		pygame.init()
+		menu_screen = pygame.display.set_mode((width, height + nav_height))
+		pygame.display.set_caption("Вибір кольорів")
+
+		font = pygame.font.Font(None, 30)
+
+        # Варіанти кольорів
+		colors_cell = {
+            "blue": (0, 44, 225),
+            "purple": (130, 0, 225),
+            "green": (14, 192, 5),
+			"aqua": (0, 225, 174),
+        }
+		colors_berry = {
+			"yellow": (255, 255, 0),
+			"red": (255, 0, 0),
+			"pink": (255, 0, 255),
+			"teal": (0, 255, 255),
+		}
+
+		color_keys_cell = list(colors_cell.keys())
+		color_keys_berry = list(colors_berry.keys())
+
+		selected_cell_color = "blue"
+		selected_berry_color = "yellow"
+
+		running = True
+		while running:
+			menu_screen.fill((50, 50, 50))
+
+			text1 = font.render("Оберіть колір стін:", True, (255, 255, 255))
+			text2 = font.render("Оберіть колір ягід:", True, (255, 255, 255))
+
+			menu_screen.blit(text1, (50, 30))
+			menu_screen.blit(text2, (50, 150))
+
+			text3 = font.render("Натисніть 'Enter' для підтвердження вибору", True, (255, 255, 255))
+			menu_screen.blit(text3, (50, 270))
+
+            # Відображення кнопок вибору кольору стін
+			for i, color in enumerate(color_keys_cell):
+				pygame.draw.rect(menu_screen, colors_cell[color], (50 + i * 90, 60, 80, 40))
+				if selected_cell_color == color:
+					pygame.draw.rect(menu_screen, (255, 255, 255), (50 + i * 90, 60, 80, 40), 3)
+
+            # Відображення кнопок вибору кольору ягід
+			for i, color in enumerate(color_keys_berry):
+				pygame.draw.rect(menu_screen, colors_berry[color], (50 + i * 90, 180, 80, 40))
+				if selected_berry_color == color:
+					pygame.draw.rect(menu_screen, (255, 255, 255), (50 + i * 90, 180, 80, 40), 3)
+
+			pygame.display.flip()
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					exit()
+
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					x, y = event.pos
+
+                    # Вибір кольору стін
+					for i, color in enumerate(color_keys_cell):
+						if 50 + i * 90 <= x <= 130 + i * 90 and 60 <= y <= 100:
+							selected_cell_color = color
+
+                    # Вибір кольору ягід
+					for i, color in enumerate(color_keys_berry):
+						if 50 + i * 90 <= x <= 130 + i * 90 and 180 <= y <= 220:
+							selected_berry_color = color
+
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_RETURN:  # Натискання Enter для підтвердження вибору
+						running = False
+
+		return selected_cell_color, selected_berry_color
 
 	# створення та додавання гравця на екран
 	def _generate_world(self):
 		# рендерить перешкоди з таблиці MAP
+		pygame.display.set_caption("Pacman")
+		
 		for y_index, col in enumerate(map_grid):
 			for x_index, char in enumerate(col):
 				if char == "1":	# для стін
-					self.walls.add(Cell(x_index, y_index, char_size, char_size))
+					self.walls.add(Cell(x_index, y_index, char_size, char_size, self.cell_color))
 				elif char == " ":	 # для шляхів, які потрібно заповнити ягодами
-					self.berries.add(Berry(x_index, y_index, char_size // 4))
+					self.berries.add(Berry(x_index, y_index, char_size // 4, self.berry_color))
 				elif char == "b":	# для великих ягід
-					self.berries.add(Berry(x_index, y_index, char_size // 2, is_power_up=True))
+					self.berries.add(Berry(x_index, y_index, char_size // 2, self.berry_color, is_power_up=True))
 				# для стартових позицій примар
 				elif char == "s":
 					self.ghosts.add(Ghost(x_index, y_index, "skyblue"))
@@ -58,9 +139,9 @@ class World:
 		for y_index, col in enumerate(map_grid):
 			for x_index, char in enumerate(col):
 				if char == " ":
-					self.berries.add(Berry(x_index, y_index, char_size // 4))
+					self.berries.add(Berry(x_index, y_index, char_size // 4, self.berry_color))
 				elif char == "b":
-					self.berries.add(Berry(x_index, y_index, char_size // 2, is_power_up=True))
+					self.berries.add(Berry(x_index, y_index, char_size // 2, self.berry_color, is_power_up=True))
 		time.sleep(2)  # Затримка перед початком рівня
 
 
