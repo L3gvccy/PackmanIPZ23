@@ -75,3 +75,29 @@ class World:
 		self.player.sprite.direction = (0, 0)
 		self.player.sprite.status = "idle"
 		self.generate_new_level()
+
+
+	def _dashboard(self):
+		# Панель з інформацією (рівень, життя, рахунок)
+		nav = pygame.Rect(0, height, width, nav_height)
+		pygame.draw.rect(self.screen, pygame.Color("cornsilk4"), nav)
+
+		self.display.show_life(self.player.sprite.life)
+		self.display.show_level(self.game_level)
+		self.display.show_score(self.player.sprite.pac_score)
+
+
+	def _check_game_state(self):
+		# Перевірка стану гри
+		if self.player.sprite.life == 0:
+			self.game_over = True
+
+		if len(self.berries) == 0 and self.player.sprite.life > 0:
+			self.game_level += 1
+			for ghost in self.ghosts.sprites():
+				ghost.move_speed += self.game_level
+				ghost.move_to_start_pos()
+			self.player.sprite.move_to_start_pos()
+			self.player.sprite.direction = (0, 0)
+			self.player.sprite.status = "idle"
+			self.generate_new_level()
