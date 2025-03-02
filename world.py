@@ -1,6 +1,5 @@
 import pygame
 import time
-
 from settings import height, width, nav_height, char_size, map_grid, player_speed
 from pac import Pac
 from cell import Cell
@@ -52,3 +51,27 @@ class World:
 					self.player.add(Pac(x_index, y_index))
 
 		self.walls_collide_list = [wall.rect for wall in self.walls.sprites()]
+
+
+	def generate_new_level(self):
+		# Генерація ягід для нового рівня
+		for y_index, col in enumerate(map_grid):
+			for x_index, char in enumerate(col):
+				if char == " ":
+					self.berries.add(Berry(x_index, y_index, char_size // 4))
+				elif char == "b":
+					self.berries.add(Berry(x_index, y_index, char_size // 2, is_power_up=True))
+		time.sleep(2)  # Затримка перед початком рівня
+
+
+	def restart_level(self):
+		# Перезапуск рівня
+		self.berries.empty()
+		[ghost.move_to_start_pos() for ghost in self.ghosts.sprites()]
+		self.game_level = 1
+		self.player.sprite.pac_score = 0
+		self.player.sprite.life = 3
+		self.player.sprite.move_to_start_pos()
+		self.player.sprite.direction = (0, 0)
+		self.player.sprite.status = "idle"
+		self.generate_new_level()
