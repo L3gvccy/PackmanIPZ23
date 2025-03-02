@@ -1,14 +1,14 @@
 import pygame
 
-from settings import CHAR_SIZE, PLAYER_SPEED
+from settings import char_size, player_speed
 from animation import import_sprite
 
 class Pac(pygame.sprite.Sprite):
 	def __init__(self, row, col):
 		super().__init__()
 
-		self.abs_x = (row * CHAR_SIZE)
-		self.abs_y = (col * CHAR_SIZE)
+		self.abs_x = (row * char_size)
+		self.abs_y = (col * char_size)
 
 		self._import_character_assets()
 		self.frame_index = 0
@@ -17,11 +17,11 @@ class Pac(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = (self.abs_x, self.abs_y))
 		self.mask = pygame.mask.from_surface(self.image)
 
-		self.pac_speed = PLAYER_SPEED
+		self.pac_speed = player_speed
 		self.immune_time = 0
 		self.immune = False
 
-		self.directions = {'left': (-PLAYER_SPEED, 0), 'right': (PLAYER_SPEED, 0), 'up': (0, -PLAYER_SPEED), 'down': (0, PLAYER_SPEED)}
+		self.directions = {'left': (-player_speed, 0), 'right': (player_speed, 0), 'up': (0, -player_speed), 'down': (0, player_speed)}
 		self.keys = {'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
 		self.direction = (0, 0)
 	
@@ -63,7 +63,7 @@ class Pac(pygame.sprite.Sprite):
 			if self.frame_index >= len(animation):
 				self.frame_index = 0
 			image = animation[int(self.frame_index)]
-			self.image = pygame.transform.scale(image, (CHAR_SIZE, CHAR_SIZE))
+			self.image = pygame.transform.scale(image, (char_size, char_size))
 
 			self.walls_collide_list = walls_collide_list
 			for key, key_value in self.keys.items():
