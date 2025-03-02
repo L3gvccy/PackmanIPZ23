@@ -2,9 +2,9 @@ import pygame
 from settings import char_size
 
 class Berry(pygame.sprite.Sprite):
-    def __init__(self, row, col, radius, is_bonus=False):
+    def __init__(self, row, col, radius, is_power_up=False):
         super().__init__()
-        self.is_bonus = is_bonus  # Чи є ягода бонусною
+        self.power_up = is_power_up  # Чи є ягода бонусною
         self.radius = radius
         self.color = pygame.Color("yellow")
         self.border_thickness = radius  # Товщина межі

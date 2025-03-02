@@ -30,57 +30,57 @@ class Pac(pygame.sprite.Sprite):
 		self.life = 3
 		self.pac_score = 0
 
-		def _import_character_assets(self):
-			character_path = "assets/pac/"
-			self.animations = {
-				"up": [],
-				"down": [],
-				"left": [],
-				"right": [],
-				"idle": [],
-				"power_up": []
-			}
-			for animation in self.animations.keys():
-				full_path = character_path + animation
-				self.animations[animation] = import_sprite(full_path)
+	def _import_character_assets(self):
+		character_path = "assets/pac/"
+		self.animations = {
+			"up": [],
+			"down": [],
+			"left": [],
+			"right": [],
+			"idle": [],
+			"power_up": []
+		}
+		for animation in self.animations.keys():
+			full_path = character_path + animation
+			self.animations[animation] = import_sprite(full_path)
 
 
-		def _is_collide(self, x, y):
-			tmp_rect = self.rect.move(x, y)
-			if tmp_rect.collidelist(self.walls_collide_list) == -1:
-				return False
-			return True
+	def _is_collide(self, x, y):
+		tmp_rect = self.rect.move(x, y)
+		if tmp_rect.collidelist(self.walls_collide_list) == -1:
+			return False
+		return True
 
 
-		def move_to_start_pos(self):
-			self.rect.x = self.abs_x
-			self.rect.y = self.abs_y
+	def move_to_start_pos(self):
+		self.rect.x = self.abs_x
+		self.rect.y = self.abs_y
 
-		def animate(self, pressed_key, walls_collide_list):
-			animation = self.animations[self.status]
+	def animate(self, pressed_key, walls_collide_list):
+		animation = self.animations[self.status]
 
-			self.frame_index += self.animation_speed
-			if self.frame_index >= len(animation):
-				self.frame_index = 0
-			image = animation[int(self.frame_index)]
-			self.image = pygame.transform.scale(image, (char_size, char_size))
+		self.frame_index += self.animation_speed
+		if self.frame_index >= len(animation):
+			self.frame_index = 0
+		image = animation[int(self.frame_index)]
+		self.image = pygame.transform.scale(image, (char_size, char_size))
 
-			self.walls_collide_list = walls_collide_list
-			for key, key_value in self.keys.items():
-				if pressed_key[key_value] and not self._is_collide(*self.directions[key]):
-					self.direction = self.directions[key]
-					self.status = key if not self.immune else "power_up"
-					break
+		self.walls_collide_list = walls_collide_list
+		for key, key_value in self.keys.items():
+			if pressed_key[key_value] and not self._is_collide(*self.directions[key]):
+				self.direction = self.directions[key]
+				self.status = key if not self.immune else "power_up"
+				break
 			
-			if not self._is_collide(*self.direction):
-				self.rect.move_ip(self.direction)
-				self.status = self.status if not self.immune else "power_up"
-			if self._is_collide(*self.direction):
-				self.status = "idle" if not self.immune else "power_up"
+		if not self._is_collide(*self.direction):
+			self.rect.move_ip(self.direction)
+			self.status = self.status if not self.immune else "power_up"
+		if self._is_collide(*self.direction):
+			self.status = "idle" if not self.immune else "power_up"
 
 
-		def update(self):
-			self.immune = True if self.immune_time > 0 else False
-			self.immune_time -= 1 if self.immune_time > 0 else 0
+	def update(self):
+		self.immune = True if self.immune_time > 0 else False
+		self.immune_time -= 1 if self.immune_time > 0 else 0
 
-			self.rect = self.image.get_rect(topleft=(self.rect.x, self.rect.y))
+		self.rect = self.image.get_rect(topleft=(self.rect.x, self.rect.y))
