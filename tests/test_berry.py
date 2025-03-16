@@ -1,6 +1,6 @@
 import pytest
 import pygame
-from berry import Berry  # Замени 'berry' на имя файла, в котором находится класс Berry
+from berry import Berry 
 
 @pytest.fixture
 def setup_berry():
@@ -21,7 +21,7 @@ def test_berry_init(setup_berry):
 def test_berry_position(setup_berry):
     """Тест коректності розрахунку позиції ягоди"""
     berry, _ = setup_berry
-    assert berry.pos_x == (5 * 32) + (32 // 2)  # char_size предполагается 32
+    assert berry.pos_x == (5 * 32) + (32 // 2)  # char_size передбачається 32
     assert berry.pos_y == (5 * 32) + (32 // 2)
 
 def test_berry_update(setup_berry):
