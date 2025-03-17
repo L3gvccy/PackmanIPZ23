@@ -1,7 +1,11 @@
 from os import walk
 import pygame
+from settings import width, height, nav_height
 
 def import_sprite(path):
+	pygame.display.init()
+	pygame.display.set_mode((width, height + nav_height))
+
 	surface_list = []
 	for _, __, img_file in walk(path):
 		for image in img_file:
