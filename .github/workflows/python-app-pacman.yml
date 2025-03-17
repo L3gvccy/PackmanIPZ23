@@ -33,7 +33,7 @@ jobs:
         flake8 . --count --exit-zero --ignore=E231,E302,W191,W291 --max-complexity=20 --max-line-length=127 --format=html --htmldir=reports/flake8-reports
     - name: Test with pytest
       run: |
-        pytest --html=reports/pytest-reports.html --self-contained-html
+        pytest --html=reports/pytest-reports/pytest.html --self-contained-html
 
     - name: Uploading reports
       uses: actions/upload-artifact@v4
