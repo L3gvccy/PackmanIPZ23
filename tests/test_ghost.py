@@ -34,9 +34,9 @@ def test_ghost_collision(setup_ghost):
     ghost.rect.topleft = (160, 160)  # Привид знаходиться в цій точці
     walls = [pygame.Rect(192, 160, 32, 32)]  # Стіна праворуч від привиду
     # Якщо привид рухається праворуч, він має зіткнутися
-    assert ghost.is_collide(33, 0, walls) is True, "Привидение должно сталкиваться со стеной справа"
+    assert ghost.is_collide(33, 0, walls) is True, "Привид повинен стикатися зі стіною праворуч"
     # Якщо рухається вліво (де немає стіни) - зіткнення не повинно бути
-    assert ghost.is_collide(-33, 0, walls) is False, "Привидение не должно сталкиваться при движении влево"
+    assert ghost.is_collide(-33, 0, walls) is False, "Привид не повинен стикатися під час руху вліво"
 
 
 def test_ghost_update(setup_ghost):
