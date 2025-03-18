@@ -48,4 +48,5 @@ def test_ghost_update(setup_ghost):
     ]
     ghost.rect.topleft = (128, 160)  
     ghost.update(walls) 
+    
 
