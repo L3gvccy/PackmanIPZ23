@@ -1,6 +1,6 @@
 import pytest
 import pygame
-from display import Display  # Замініть 'your_module' на назву файлу з класом Display
+from display import Display
 
 @pytest.fixture
 def setup_display():
