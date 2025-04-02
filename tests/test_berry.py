@@ -25,6 +25,6 @@ def test_berry_position(setup_berry):
     assert berry.pos_y == (5 * 32) + (32 // 2)
 
 def test_berry_update(setup_berry):
-    """Тест отрисовки ягоди (перевірка на відсутність помилок)"""
+    """Тест малювання ягоди (перевірка на відсутність помилок)"""
     berry, screen = setup_berry
     berry.update(screen)
