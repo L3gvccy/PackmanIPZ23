@@ -2,7 +2,8 @@
 <p>Гра пакман для лабораторної роботи з дисципліни CI/CD</p>
 
 <image src="https://i.postimg.cc/KzQf8cB3/2025-04-11-162254803.png"></image>
-<image scr="https://i.postimg.cc/J72362q8/2025-04-11-162601159.png"></image>
+<p></p>
+<image src="https://i.postimg.cc/hvdsnk8H/2025-04-11-162941705.png"></image>
 
 <h2>Використані технології</h2>
 <ul>
